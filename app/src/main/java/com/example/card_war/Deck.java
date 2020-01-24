@@ -1,24 +1,24 @@
 package com.example.card_war;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
 public class Deck {
-    private ArrayList<Card> activeDeck = new ArrayList<>();
+    private ArrayList<Card> activeDeck;
     private ArrayList<Card> disabledDeck = new ArrayList<>();
+    private int numberOfCardsActive;
 
-    public Deck() {
-        creatingCardDeck(activeDeck);
-
+    public Deck(ArrayList<Card> deck) {
+        activeDeck = new ArrayList<>(deck);
+        numberOfCardsActive = 26;
+        shuffle();
     }
-
-    private void creatingCardDeck(ArrayList<Card> cardList){
-        for(int i = 2 ; i <15 ; i++){
-
-            for(int j = 1 ; j<5;j++){
-                cardList.add(new Card(j,i));
-            }
+    public void print(){
+        for(int i=0 ; i <activeDeck.size();i++){
+            Log.println(Log.INFO , "1" , ""+(activeDeck.get(i).getNumber()-48)+" "+(activeDeck.get(i).getColour()-48)+" :"+i);
         }
 
     }

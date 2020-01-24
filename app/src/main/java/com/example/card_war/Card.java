@@ -5,21 +5,21 @@ public class Card implements  Comparable{
     private int number;
     private boolean used;
 
-    public Card(int colour, int number) {
+    public Card(int number, int colour) {
         this.colour = colour;
         this.number = number;
         this.used = false;
     }
 
-    private int getColour() {
+    public int getColour() {
         return colour;
     }
 
-    private int getNumber() {
+    public int getNumber() {
         return number;
     }
 
-    private boolean isUsed() {
+    public boolean isUsed() {
         return used;
     }
 

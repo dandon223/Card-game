@@ -24,7 +24,6 @@ import java.util.Random;
 
 public class GameActivity extends AppCompatActivity {
     private long mLastClickTime = 0;
-    private int numberofCardsinHand;
     private  boolean isMyCardSeen;
     private Deck myDeck;
     private Deck enemyDeck;
@@ -32,10 +31,24 @@ public class GameActivity extends AppCompatActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        myDeck = new Deck();
-        enemyDeck = new Deck();
+        ArrayList<String> deck = new ArrayList<>();
+        deck =randomCards(deck);
+        ArrayList<Card> myCards = new ArrayList<>();
+        ArrayList<Card> enemyCards = new ArrayList<>();
+        int even = 0;
+        for(int i = 0 ; i <deck.size(); i++){
+                even++;
+                String name = deck.get(i);
+                Log.println(Log.DEBUG , "s" , ""+i+" ");
+                Card card = new Card(name.charAt(0) , name.charAt(1));
+                if(even%2 ==0)
+                    myCards.add(card);
+                else
+                    enemyCards.add(card);
+        }
+        myDeck = new Deck(myCards);
+        enemyDeck = new Deck(enemyCards);
         setContentView(R.layout.activity_main__game);
-        numberofCardsinHand = 26;
         isMyCardSeen = false;
         cardEffect =  MediaPlayer.create(this , R.raw.card_sound );
         startGame();
@@ -54,6 +67,16 @@ public class GameActivity extends AppCompatActivity {
         enemyDeck.shuffle();
         updateTextView("26/52");
     }
+    private ArrayList<String> randomCards(ArrayList<String> deck){
+        for(int i = 2 ; i <15 ; i++){
+
+            for(int j = 1 ; j<5;j++){
+                deck.add(""+i+j);
+            }
+        }
+        Collections.shuffle(deck, new Random());
+        return new ArrayList<String>(deck);
+    }
     public void onCardClick(View view){
         if (SystemClock.elapsedRealtime() - mLastClickTime < 1100){
             return;
@@ -62,12 +85,11 @@ public class GameActivity extends AppCompatActivity {
         final ImageButton enemyCard =(ImageButton) findViewById(R.id.enemyCard);
         mLastClickTime = SystemClock.elapsedRealtime();
         cardEffect.start();
-
         Context c = getApplicationContext();
-        final int id = c.getResources().getIdentifier("drawable/"+"as_pik", null, c.getPackageName());
+        final int id = c.getResources().getIdentifier("drawable/"+"c21", null, c.getPackageName());
         if(isMyCardSeen){
             isMyCardSeen = false;
-            card.setImageResource(R.drawable.card_back);
+            card.setImageResource(R.drawable.purple_back);
             ObjectAnimator animation = ObjectAnimator.ofFloat(enemyCard, "translationY", 0f);
             animation.setDuration(1000);
             animation.start();
@@ -75,7 +97,7 @@ public class GameActivity extends AppCompatActivity {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    enemyCard.setImageResource(R.drawable.card_back);
+                    enemyCard.setImageResource(R.drawable.purple_back);
                 }
             },1000);
         }
