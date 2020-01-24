@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.IBinder;
 import android.provider.Settings;
+import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 
@@ -29,6 +31,11 @@ public class MusicService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        String text = intent.getStringExtra(MainActivity.MUSIC_STOP);
+        if(text!=null && text.equals("stop"))
+            player.pause();
+        else if(text!=null && text.equals("play"))
+            player.start();
         return START_STICKY;
     }
     @Override

@@ -1,15 +1,21 @@
 package com.example.card_war;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageView;
 
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageButton;
+
 public class MainActivity extends AppCompatActivity {
+    static final String MUSIC_STOP = "com.example.MUSIC_STOP";
+    private boolean isMusic;
 
 
     @Override
@@ -20,8 +26,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Intent musicService=  new Intent(this, MusicService.class);
 
-        if(!isMyServiceRunning(MusicService.class))
+        if(!isMyServiceRunning(MusicService.class)){
+            isMusic = true;
             startService(musicService);
+        }
     }
     public void newGame(View view) {
         Intent intent = new Intent(this, GameActivity.class);
@@ -35,6 +43,21 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return false;
+    }
+    public void changingMusic(View view){
+        ImageButton musicButton =(ImageButton) findViewById(R.id.musicButton);
+        Intent intent = new Intent(this, MusicService.class);
+        if(isMusic){
+            musicButton.setImageResource(android.R.drawable.ic_media_play);
+            intent.putExtra(MUSIC_STOP , "stop");
+            isMusic = false;
+        }
+        else{
+            isMusic = true;
+            musicButton.setImageResource(android.R.drawable.ic_media_pause);
+            intent.putExtra(MUSIC_STOP , "play");
+        }
+        startService(intent);
     }
 
 

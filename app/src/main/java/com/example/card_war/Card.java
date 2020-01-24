@@ -1,6 +1,6 @@
 package com.example.card_war;
 
-public class Card {
+public class Card implements  Comparable{
     private int colour;
     private int number;
     private boolean used;
@@ -11,19 +11,35 @@ public class Card {
         this.used = false;
     }
 
-    public int getColour() {
+    private int getColour() {
         return colour;
     }
 
-    public int getNumber() {
+    private int getNumber() {
         return number;
     }
 
-    public boolean isUsed() {
+    private boolean isUsed() {
         return used;
     }
 
     public void setUsed(boolean used) {
         this.used = used;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        Card other = (Card) o;
+        if(this.number > other.getNumber())
+            return 1;
+        else if(this.number < other.getNumber())
+            return -1;
+        else
+            if(this.colour > other.getColour())
+                return 1;
+            else if(this.colour < other.getColour())
+                return -1;
+            else
+                return 0;
     }
 }
