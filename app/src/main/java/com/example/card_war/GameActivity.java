@@ -26,21 +26,17 @@ public class GameActivity extends AppCompatActivity {
     private long mLastClickTime = 0;
     private int numberofCardsinHand;
     private  boolean isMyCardSeen;
-    ArrayList<Card> cardList1 = new ArrayList<>();
-    ArrayList<Card> cardList2 = new ArrayList<>();
+    private Deck myDeck;
+    private Deck enemyDeck;
     MediaPlayer cardEffect;
-
-
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        myDeck = new Deck();
+        enemyDeck = new Deck();
         setContentView(R.layout.activity_main__game);
-        cardList1.clear();
-        cardList2.clear();
         numberofCardsinHand = 26;
         isMyCardSeen = false;
-        creatingCardDeck(cardList1);
-        creatingCardDeck(cardList2);
         cardEffect =  MediaPlayer.create(this , R.raw.card_sound );
         startGame();
     }
@@ -49,22 +45,13 @@ public class GameActivity extends AppCompatActivity {
         cardEffect.release();
         finish();
     }
-    private void creatingCardDeck(ArrayList<Card> cardList){
-        for(int i = 2 ; i <15 ; i++){
-
-            for(int j = 1 ; j<5;j++){
-                cardList.add(new Card(j,i));
-            }
-        }
-
-    }
     private void updateTextView(String toThis) {
         TextView textView2 = (TextView) findViewById(R.id.textView2);
         textView2.setText(toThis);
     }
     private void startGame(){
-        Collections.shuffle(cardList1, new Random());
-        Collections.shuffle(cardList2, new Random());
+        myDeck.shuffle();
+        enemyDeck.shuffle();
         updateTextView("26/52");
     }
     public void onCardClick(View view){
