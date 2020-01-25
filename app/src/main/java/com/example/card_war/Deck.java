@@ -18,7 +18,7 @@ public class Deck {
     }
     public void print(){
         for(int i=0 ; i <activeDeck.size();i++){
-            Log.println(Log.INFO , "1" , ""+(activeDeck.get(i).getNumber()-48)+" "+(activeDeck.get(i).getColour()-48)+" :"+i);
+            Log.println(Log.INFO , "1" , ""+activeDeck.get(i).getNumber()+" "+activeDeck.get(i).getColour()+" :"+i);
         }
 
     }

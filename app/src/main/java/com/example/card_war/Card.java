@@ -1,21 +1,21 @@
 package com.example.card_war;
 
 public class Card implements  Comparable{
-    private int colour;
-    private int number;
+    private String colour;
+    private String number;
     private boolean used;
 
-    public Card(int number, int colour) {
+    public Card(String number, String colour) {
         this.colour = colour;
         this.number = number;
         this.used = false;
     }
 
-    public int getColour() {
+    public String getColour() {
         return colour;
     }
 
-    public int getNumber() {
+    public String getNumber() {
         return number;
     }
 
@@ -30,14 +30,14 @@ public class Card implements  Comparable{
     @Override
     public int compareTo(Object o) {
         Card other = (Card) o;
-        if(this.number > other.getNumber())
+        if(this.number.compareTo(other.getNumber())>0 )
             return 1;
-        else if(this.number < other.getNumber())
+        else if(this.number.compareTo(other.getNumber())<0)
             return -1;
         else
-            if(this.colour > other.getColour())
+            if(this.colour.compareTo(other.getColour()) > 0)
                 return 1;
-            else if(this.colour < other.getColour())
+            else if(this.colour.compareTo(other.getColour()) <0)
                 return -1;
             else
                 return 0;

@@ -6,6 +6,7 @@ import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.LinearGradient;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -39,12 +40,20 @@ public class GameActivity extends AppCompatActivity {
         for(int i = 0 ; i <deck.size(); i++){
                 even++;
                 String name = deck.get(i);
-                Log.println(Log.DEBUG , "s" , ""+i+" ");
-                Card card = new Card(name.charAt(0) , name.charAt(1));
-                if(even%2 ==0)
-                    myCards.add(card);
-                else
-                    enemyCards.add(card);
+                if(name.charAt(0)=='1'){
+                    Card card = new Card(String.valueOf(name.charAt(0))+String.valueOf(name.charAt(1)) , String.valueOf(name.charAt(2)));
+                    if(even%2 ==0)
+                        myCards.add(card);
+                    else
+                        enemyCards.add(card);
+                }
+                else{
+                    Card card = new Card(String.valueOf(name.charAt(0)) , String.valueOf(name.charAt(1)));
+                    if(even%2 ==0)
+                        myCards.add(card);
+                    else
+                        enemyCards.add(card);
+                }
         }
         myDeck = new Deck(myCards);
         enemyDeck = new Deck(enemyCards);
@@ -68,7 +77,7 @@ public class GameActivity extends AppCompatActivity {
         for(int i = 2 ; i <15 ; i++){
 
             for(int j = 1 ; j<5;j++){
-                deck.add(""+i+j);
+                deck.add(String.valueOf(i)+String.valueOf(j));
             }
         }
         Collections.shuffle(deck, new Random());
@@ -99,9 +108,13 @@ public class GameActivity extends AppCompatActivity {
         }
         else{
             isMyCardSeen = true;
-            Card myCard = myDeck.getLastCard();
-            String cardName = ""+ myCard.getNumber() +myCard.getColour();
-            final int id = c.getResources().getIdentifier("drawable/"+"c21", null, c.getPackageName());
+            Card myCardDrawn = myDeck.getLastCard();
+            Card enemyCardDrawn = enemyDeck.getLastCard();
+            String myCardName = "c"+ myCardDrawn.getNumber() +myCardDrawn.getColour();
+            String enemyCardName = "c"+ enemyCardDrawn.getNumber() +enemyCardDrawn.getColour();
+            Log.println(Log.DEBUG , "y" , myCardName +" "+enemyCardName);
+            final int id = c.getResources().getIdentifier("drawable/"+myCardName, null, c.getPackageName());
+            final int id2 = c.getResources().getIdentifier("drawable/"+enemyCardName, null, c.getPackageName());
             ObjectAnimator animation = ObjectAnimator.ofFloat(enemyCard, "translationY", 400f);
             animation.setDuration(1000);
             animation.start();
@@ -110,7 +123,7 @@ public class GameActivity extends AppCompatActivity {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    enemyCard.setImageResource(id);
+                    enemyCard.setImageResource(id2);
                 }
             }, 1000);
         }
