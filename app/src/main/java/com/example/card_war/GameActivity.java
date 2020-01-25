@@ -51,7 +51,9 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main__game);
         isMyCardSeen = false;
         cardEffect =  MediaPlayer.create(this , R.raw.card_sound );
-        startGame();
+        myDeck.shuffle();
+        enemyDeck.shuffle();
+        updateTextView("26/52");
     }
 
     public void back(View view){
@@ -61,11 +63,6 @@ public class GameActivity extends AppCompatActivity {
     private void updateTextView(String toThis) {
         TextView textView2 = (TextView) findViewById(R.id.textView2);
         textView2.setText(toThis);
-    }
-    private void startGame(){
-        myDeck.shuffle();
-        enemyDeck.shuffle();
-        updateTextView("26/52");
     }
     private ArrayList<String> randomCards(ArrayList<String> deck){
         for(int i = 2 ; i <15 ; i++){
@@ -86,7 +83,6 @@ public class GameActivity extends AppCompatActivity {
         mLastClickTime = SystemClock.elapsedRealtime();
         cardEffect.start();
         Context c = getApplicationContext();
-        final int id = c.getResources().getIdentifier("drawable/"+"c21", null, c.getPackageName());
         if(isMyCardSeen){
             isMyCardSeen = false;
             card.setImageResource(R.drawable.purple_back);
@@ -103,6 +99,9 @@ public class GameActivity extends AppCompatActivity {
         }
         else{
             isMyCardSeen = true;
+            Card myCard = myDeck.getLastCard();
+            String cardName = ""+ myCard.getNumber() +myCard.getColour();
+            final int id = c.getResources().getIdentifier("drawable/"+"c21", null, c.getPackageName());
             ObjectAnimator animation = ObjectAnimator.ofFloat(enemyCard, "translationY", 400f);
             animation.setDuration(1000);
             animation.start();

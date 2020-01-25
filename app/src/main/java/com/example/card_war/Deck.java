@@ -26,4 +26,12 @@ public class Deck {
         Collections.shuffle(activeDeck, new Random());
     }
 
+    public Card getLastCard(){
+        Card card = new Card(activeDeck.get(0).getNumber() , activeDeck.get(0).getColour());
+        return card;
+    }
+    public void removeCard(int i){
+        activeDeck.remove(i);
+    }
+
 }
