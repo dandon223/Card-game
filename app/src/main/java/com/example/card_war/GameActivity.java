@@ -32,34 +32,37 @@ public class GameActivity extends AppCompatActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main__game);
+        restart();
+        cardEffect =  MediaPlayer.create(this , R.raw.card_sound );
+    }
+    public void restart(){
         ArrayList<String> deck = new ArrayList<>();
         deck =randomCards(deck);
         ArrayList<Card> myCards = new ArrayList<>();
         ArrayList<Card> enemyCards = new ArrayList<>();
         int even = 0;
         for(int i = 0 ; i <deck.size(); i++){
-                even++;
-                String name = deck.get(i);
-                if(name.charAt(0)=='1'){
-                    Card card = new Card(String.valueOf(name.charAt(0))+String.valueOf(name.charAt(1)) , String.valueOf(name.charAt(2)));
-                    if(even%2 ==0)
-                        myCards.add(card);
-                    else
-                        enemyCards.add(card);
-                }
-                else{
-                    Card card = new Card(String.valueOf(name.charAt(0)) , String.valueOf(name.charAt(1)));
-                    if(even%2 ==0)
-                        myCards.add(card);
-                    else
-                        enemyCards.add(card);
-                }
+            even++;
+            String name = deck.get(i);
+            if(name.charAt(0)=='1'){
+                Card card = new Card(String.valueOf(name.charAt(0))+String.valueOf(name.charAt(1)) , String.valueOf(name.charAt(2)));
+                if(even%2 ==0)
+                    myCards.add(card);
+                else
+                    enemyCards.add(card);
+            }
+            else{
+                Card card = new Card(String.valueOf(name.charAt(0)) , String.valueOf(name.charAt(1)));
+                if(even%2 ==0)
+                    myCards.add(card);
+                else
+                    enemyCards.add(card);
+            }
         }
         myDeck = new Deck(myCards);
         enemyDeck = new Deck(enemyCards);
-        setContentView(R.layout.activity_main__game);
         isMyCardSeen = false;
-        cardEffect =  MediaPlayer.create(this , R.raw.card_sound );
         myDeck.shuffle();
         enemyDeck.shuffle();
         updateTextView("26/52");
@@ -84,7 +87,7 @@ public class GameActivity extends AppCompatActivity {
         return new ArrayList<String>(deck);
     }
     public void onCardClick(View view){
-        if (SystemClock.elapsedRealtime() - mLastClickTime < 1100){
+        if (SystemClock.elapsedRealtime() - mLastClickTime < 800){
             return;
         }
         final ImageButton card =(ImageButton) findViewById(R.id.card);
@@ -96,7 +99,7 @@ public class GameActivity extends AppCompatActivity {
             isMyCardSeen = false;
             card.setImageResource(R.drawable.purple_back);
             ObjectAnimator animation = ObjectAnimator.ofFloat(enemyCard, "translationY", 0f);
-            animation.setDuration(1000);
+            animation.setDuration(700);
             animation.start();
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
@@ -104,7 +107,7 @@ public class GameActivity extends AppCompatActivity {
                 public void run() {
                     enemyCard.setImageResource(R.drawable.purple_back);
                 }
-            },1000);
+            },700);
         }
         else{
             isMyCardSeen = true;
@@ -116,7 +119,7 @@ public class GameActivity extends AppCompatActivity {
             final int id = c.getResources().getIdentifier("drawable/"+myCardName, null, c.getPackageName());
             final int id2 = c.getResources().getIdentifier("drawable/"+enemyCardName, null, c.getPackageName());
             ObjectAnimator animation = ObjectAnimator.ofFloat(enemyCard, "translationY", 400f);
-            animation.setDuration(1000);
+            animation.setDuration(700);
             animation.start();
             card.setImageResource(id);
             final Handler handler = new Handler();
@@ -125,7 +128,38 @@ public class GameActivity extends AppCompatActivity {
                 public void run() {
                     enemyCard.setImageResource(id2);
                 }
-            }, 1000);
+            }, 700);
+            enemyDeck.addToNumberOfCardsActive(-1);
+            myDeck.addToNumberOfCardsActive(-1);
+            if(myCardDrawn.compareTo(enemyCardDrawn) > 0){
+                myDeck.removeCard(0);
+                myDeck.addToDisabled(myCardDrawn);
+                myDeck.addToDisabled(enemyCardDrawn);
+                enemyDeck.removeCard(0);
+                myDeck.addToNumberOfCards(1);
+                enemyDeck.addToNumberOfCards(-1);
+                updateTextView(myDeck.getNumberOfCards()+"/52");
+            }
+            else{
+                myDeck.removeCard(0);
+                enemyDeck.removeCard(0);
+                enemyDeck.addToDisabled(myCardDrawn);
+                enemyDeck.addToDisabled(enemyCardDrawn);
+                myDeck.addToNumberOfCards(-1);
+                enemyDeck.addToNumberOfCards(1);
+                updateTextView(myDeck.getNumberOfCards()+"/52");
+            }
+            if(myDeck.getNumberOfCardsActive()==0){
+                int numberOfCards = myDeck.disabledToActive();
+                myDeck.setNumberOfCardsActive(numberOfCards);
+                myDeck.shuffle();
+            }
+            if(enemyDeck.getNumberOfCardsActive()==0){
+                int numberOfCards = enemyDeck.disabledToActive();
+                enemyDeck.setNumberOfCardsActive(numberOfCards);
+                enemyDeck.shuffle();
+            }
+            Log.println(Log.INFO , "1" , myDeck.getNumberOfCardsActive()+" "+myDeck.getNumberOfCards() );
         }
     }
 

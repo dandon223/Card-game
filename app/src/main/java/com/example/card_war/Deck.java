@@ -9,18 +9,46 @@ import java.util.Random;
 public class Deck {
     private ArrayList<Card> activeDeck;
     private ArrayList<Card> disabledDeck = new ArrayList<>();
+    private int numberOfCards;
     private int numberOfCardsActive;
 
     public Deck(ArrayList<Card> deck) {
         activeDeck = new ArrayList<>(deck);
+        numberOfCards = 26;
         numberOfCardsActive = 26;
         shuffle();
     }
+    public void addToNumberOfCardsActive(int i){
+        numberOfCardsActive = numberOfCardsActive +i;
+    }
+    public int getNumberOfCardsActive() {
+        return numberOfCardsActive;
+    }
+
+    public void setNumberOfCardsActive(int numberOfCardsActive) {
+        this.numberOfCardsActive = numberOfCardsActive;
+    }
+
     public void print(){
         for(int i=0 ; i <activeDeck.size();i++){
             Log.println(Log.INFO , "1" , ""+activeDeck.get(i).getNumber()+" "+activeDeck.get(i).getColour()+" :"+i);
         }
 
+    }
+
+    public void setNumberOfCards(int numberOfCards) {
+        this.numberOfCards = numberOfCards;
+    }
+
+    public int getNumberOfCards() {
+        return numberOfCards;
+    }
+    public void addToNumberOfCards(int i){
+        numberOfCards = numberOfCards +i;
+    }
+
+    public void addToDisabled(Card card){
+        disabledDeck.add(card);
     }
     public void shuffle(){
         Collections.shuffle(activeDeck, new Random());
@@ -32,6 +60,11 @@ public class Deck {
     }
     public void removeCard(int i){
         activeDeck.remove(i);
+    }
+    public int disabledToActive(){
+        activeDeck = new ArrayList<Card>(disabledDeck);
+        disabledDeck = new ArrayList<Card>();
+        return activeDeck.size();
     }
 
 }
