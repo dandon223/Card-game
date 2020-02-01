@@ -17,6 +17,13 @@ public class MainActivity extends AppCompatActivity {
     static final String MUSIC_STOP = "com.example.MUSIC_STOP";
     private boolean isMusic;
 
+    @Override
+    protected void onDestroy() {
+        Intent musicService=  new Intent(this, MusicService.class);
+        if(isMyServiceRunning(MusicService.class))
+            stopService(musicService);
+        super.onDestroy();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

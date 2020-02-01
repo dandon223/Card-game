@@ -128,7 +128,7 @@ public class GameActivity extends AppCompatActivity implements FinishDialog.Fini
             Log.println(Log.DEBUG , "y" , myCardName +" "+enemyCardName);
             final int id = c.getResources().getIdentifier("drawable/"+myCardName, null, c.getPackageName());
             final int id2 = c.getResources().getIdentifier("drawable/"+enemyCardName, null, c.getPackageName());
-            ObjectAnimator animation = ObjectAnimator.ofFloat(enemyCard, "translationY", 400f);
+            ObjectAnimator animation = ObjectAnimator.ofFloat(enemyCard, "translationY", 300f);
             animation.setDuration(700);
             animation.start();
             card.setImageResource(id);
