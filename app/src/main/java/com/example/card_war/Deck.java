@@ -67,4 +67,38 @@ public class Deck {
         return activeDeck.size();
     }
 
+    public int getPoints(){
+        int points=0;
+        for(int i = 0 ; i <activeDeck.size();i++)
+        {
+            int first;
+            int second;
+            try {
+                first = Integer.parseInt(activeDeck.get(i).getNumber());
+                second = Integer.parseInt(activeDeck.get(i).getColour());
+            }
+            catch (NumberFormatException e)
+            {
+                first = 0;
+                second = 0;
+            }
+            points = points +first +second ;
+        }
+        for(int i = 0 ; i <disabledDeck.size();i++)
+        {
+            int first;
+            int second;
+            try {
+                first = Integer.parseInt(disabledDeck.get(i).getNumber());
+                second = Integer.parseInt(disabledDeck.get(i).getColour());
+            }
+            catch (NumberFormatException e)
+            {
+                first = 0;
+                second = 0;
+            }
+            points = points +first +second ;
+        }
+        return points;
+    }
 }

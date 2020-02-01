@@ -23,11 +23,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-public class GameActivity extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity implements FinishDialog.FinishDialogListener {
     private long mLastClickTime = 0;
     private  boolean isMyCardSeen;
     private Deck myDeck;
     private Deck enemyDeck;
+    private int numberOfClicks;
+    private int points;
     MediaPlayer cardEffect;
 
     public void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,8 @@ public class GameActivity extends AppCompatActivity {
         deck =randomCards(deck);
         ArrayList<Card> myCards = new ArrayList<>();
         ArrayList<Card> enemyCards = new ArrayList<>();
+        numberOfClicks = 0;
+        points = 10;
         int even = 0;
         for(int i = 0 ; i <deck.size(); i++){
             even++;
@@ -65,12 +69,17 @@ public class GameActivity extends AppCompatActivity {
         isMyCardSeen = false;
         myDeck.shuffle();
         enemyDeck.shuffle();
-        updateTextView("26/52");
+        countPoints();
+        updateTextView("26/52 \nPoints: " +getPoints());
+        myDeck.print();
     }
 
     public void back(View view){
         cardEffect.release();
         finish();
+    }
+    public int getPoints(){
+        return points;
     }
     private void updateTextView(String toThis) {
         TextView textView2 = (TextView) findViewById(R.id.textView2);
@@ -110,6 +119,7 @@ public class GameActivity extends AppCompatActivity {
             },700);
         }
         else{
+            numberOfClicks++;
             isMyCardSeen = true;
             Card myCardDrawn = myDeck.getLastCard();
             Card enemyCardDrawn = enemyDeck.getLastCard();
@@ -138,7 +148,6 @@ public class GameActivity extends AppCompatActivity {
                 enemyDeck.removeCard(0);
                 myDeck.addToNumberOfCards(1);
                 enemyDeck.addToNumberOfCards(-1);
-                updateTextView(myDeck.getNumberOfCards()+"/52");
             }
             else{
                 myDeck.removeCard(0);
@@ -147,7 +156,6 @@ public class GameActivity extends AppCompatActivity {
                 enemyDeck.addToDisabled(enemyCardDrawn);
                 myDeck.addToNumberOfCards(-1);
                 enemyDeck.addToNumberOfCards(1);
-                updateTextView(myDeck.getNumberOfCards()+"/52");
             }
             if(myDeck.getNumberOfCardsActive()==0){
                 int numberOfCards = myDeck.disabledToActive();
@@ -159,9 +167,26 @@ public class GameActivity extends AppCompatActivity {
                 enemyDeck.setNumberOfCardsActive(numberOfCards);
                 enemyDeck.shuffle();
             }
-            Log.println(Log.INFO , "1" , myDeck.getNumberOfCardsActive()+" "+myDeck.getNumberOfCards() );
+            if(numberOfClicks>=2){
+                openDialog();
+            }
+            countPoints();
+            updateTextView(myDeck.getNumberOfCards()+"/52 \nPoints:"+ getPoints());
+            Log.println(Log.INFO , "1" , myDeck.getNumberOfCardsActive()+" "+myDeck.getNumberOfCards() +" "+ myCardDrawn.compareTo(enemyCardDrawn) );
         }
     }
+    public void openDialog(){
+        FinishDialog finishDialog = new FinishDialog();
+        countPoints();
+        finishDialog.setPoints(points);
+        finishDialog.show(getSupportFragmentManager(), "finish dialog");
+    }
 
+    @Override
+    public void applyTexts(String username) {
 
+    }
+    public void countPoints(){
+        points = myDeck.getPoints();
+    }
 }
