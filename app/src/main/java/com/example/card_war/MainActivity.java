@@ -66,6 +66,11 @@ public class MainActivity extends AppCompatActivity {
         }
         startService(intent);
     }
+    public void rankingActivity(View view){
+        Intent intent = new Intent(this, RankingActivity.class);
+        startActivity(intent);
+
+    }
 
 
 }

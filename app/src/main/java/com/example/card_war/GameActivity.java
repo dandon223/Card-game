@@ -31,6 +31,8 @@ public class GameActivity extends AppCompatActivity implements FinishDialog.Fini
     private int numberOfClicks;
     private int points;
     MediaPlayer cardEffect;
+    static final String RANKING_NAME = "com.example.RANKING_NAME";
+    static final String RANKING_POINTS = "com.example.RANKING_POINTS";
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -183,7 +185,11 @@ public class GameActivity extends AppCompatActivity implements FinishDialog.Fini
     }
 
     @Override
-    public void applyTexts(String username) {
+    public void applyTexts(String username , int points) {
+        Intent intent = new Intent(this, RankingActivity.class);
+        intent.putExtra(RANKING_NAME , username);
+        intent.putExtra(RANKING_POINTS , points);
+        startActivity(intent);
 
     }
     public void countPoints(){

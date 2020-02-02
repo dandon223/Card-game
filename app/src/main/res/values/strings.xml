@@ -4,5 +4,6 @@
     <string name="back_button">Back</string>
     <string name="title_activity_game">GameActivity</string>
     <string name="back_card">back_card</string>
+    <string name="ranking">ranking</string>
     <string name="music">music</string>
 </resources>

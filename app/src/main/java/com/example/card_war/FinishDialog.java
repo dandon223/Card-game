@@ -38,7 +38,7 @@ public class FinishDialog extends AppCompatDialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String username = editTextUsername.getText().toString();
-                        listener.applyTexts(username);
+                        listener.applyTexts(username , numberOfPoints);
                     }
                 });
         editTextUsername = (EditText) view.findViewById(R.id.edit_username);
@@ -47,7 +47,7 @@ public class FinishDialog extends AppCompatDialogFragment {
         return builder.create();
     }
     public interface FinishDialogListener{
-        void applyTexts(String username);
+        void applyTexts(String username , int points);
     }
 
     @Override
