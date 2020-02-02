@@ -194,6 +194,7 @@ public class GameActivity extends AppCompatActivity implements FinishDialog.Fini
         cv.put(Ranking.RankingEntry.COLUMN_NAME,name );
         cv.put(Ranking.RankingEntry.COLUMN_POINTS,points );
         mDataBase.insert(Ranking.RankingEntry.TABLE_NAME,null,cv);
+        finish();
 
     }
     public void countPoints(){
