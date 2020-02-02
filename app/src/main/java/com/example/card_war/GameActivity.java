@@ -28,7 +28,6 @@ import java.util.Random;
 
 public class GameActivity extends AppCompatActivity implements FinishDialog.FinishDialogListener {
     private SQLiteDatabase mDataBase;
-    private RankingAdapter mAdapter;
     private long mLastClickTime = 0;
     private  boolean isMyCardSeen;
     private Deck myDeck;
@@ -36,15 +35,12 @@ public class GameActivity extends AppCompatActivity implements FinishDialog.Fini
     private int numberOfClicks;
     private int points;
     MediaPlayer cardEffect;
-    static final String RANKING_NAME = "com.example.RANKING_NAME";
-    static final String RANKING_POINTS = "com.example.RANKING_POINTS";
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main__game);
         RankingDBHelper dbHelper = new RankingDBHelper(this);
         mDataBase = dbHelper.getWritableDatabase();
-        mAdapter = new RankingAdapter(this , getAllItems());
         restart();
         cardEffect =  MediaPlayer.create(this , R.raw.card_sound );
     }
@@ -198,19 +194,7 @@ public class GameActivity extends AppCompatActivity implements FinishDialog.Fini
         cv.put(Ranking.RankingEntry.COLUMN_NAME,name );
         cv.put(Ranking.RankingEntry.COLUMN_POINTS,points );
         mDataBase.insert(Ranking.RankingEntry.TABLE_NAME,null,cv);
-        mAdapter.swapCursor(getAllItems());
 
-    }
-    private Cursor getAllItems(){
-        return mDataBase.query(
-                Ranking.RankingEntry.TABLE_NAME,
-                null,
-                null,
-                null,
-                null,
-                null,
-                Ranking.RankingEntry.COLUMN_TIMESTAMP + " DESC"
-        );
     }
     public void countPoints(){
         points = myDeck.getPoints();

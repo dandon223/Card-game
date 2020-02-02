@@ -38,7 +38,7 @@ public class RankingActivity extends AppCompatActivity {
                 null,
                 null,
                 null,
-                Ranking.RankingEntry.COLUMN_TIMESTAMP + " DESC"
+                Ranking.RankingEntry.COLUMN_POINTS + " DESC"
         );
     }
 }
