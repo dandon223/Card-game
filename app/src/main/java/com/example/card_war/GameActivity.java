@@ -4,8 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.LinearGradient;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
@@ -24,6 +27,8 @@ import java.util.Collections;
 import java.util.Random;
 
 public class GameActivity extends AppCompatActivity implements FinishDialog.FinishDialogListener {
+    private SQLiteDatabase mDataBase;
+    private RankingAdapter mAdapter;
     private long mLastClickTime = 0;
     private  boolean isMyCardSeen;
     private Deck myDeck;
@@ -37,6 +42,9 @@ public class GameActivity extends AppCompatActivity implements FinishDialog.Fini
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main__game);
+        RankingDBHelper dbHelper = new RankingDBHelper(this);
+        mDataBase = dbHelper.getWritableDatabase();
+        mAdapter = new RankingAdapter(this , getAllItems());
         restart();
         cardEffect =  MediaPlayer.create(this , R.raw.card_sound );
     }
@@ -185,12 +193,24 @@ public class GameActivity extends AppCompatActivity implements FinishDialog.Fini
     }
 
     @Override
-    public void applyTexts(String username , int points) {
-        Intent intent = new Intent(this, RankingActivity.class);
-        intent.putExtra(RANKING_NAME , username);
-        intent.putExtra(RANKING_POINTS , points);
-        startActivity(intent);
+    public void applyTexts(String name , int points) {
+        ContentValues cv = new ContentValues();
+        cv.put(Ranking.RankingEntry.COLUMN_NAME,name );
+        cv.put(Ranking.RankingEntry.COLUMN_POINTS,points );
+        mDataBase.insert(Ranking.RankingEntry.TABLE_NAME,null,cv);
+        mAdapter.swapCursor(getAllItems());
 
+    }
+    private Cursor getAllItems(){
+        return mDataBase.query(
+                Ranking.RankingEntry.TABLE_NAME,
+                null,
+                null,
+                null,
+                null,
+                null,
+                Ranking.RankingEntry.COLUMN_TIMESTAMP + " DESC"
+        );
     }
     public void countPoints(){
         points = myDeck.getPoints();

@@ -26,22 +26,9 @@ public class RankingActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new RankingAdapter(this , getAllItems());
         recyclerView.setAdapter(mAdapter);
-
-        Intent intent = getIntent();
-        String text = intent.getStringExtra(GameActivity.RANKING_NAME);
-        int points = intent.getIntExtra(GameActivity.RANKING_POINTS,0);
-        addRank(text , points);
     }
     public void back(View view){
         finish();
-    }
-    private void addRank(String name , int points){
-        ContentValues cv = new ContentValues();
-        cv.put(Ranking.RankingEntry.COLUMN_NAME,name );
-        cv.put(Ranking.RankingEntry.COLUMN_POINTS,points );
-        mDataBase.insert(Ranking.RankingEntry.TABLE_NAME,null,cv);
-        mAdapter.swapCursor(getAllItems());
-
     }
     private Cursor getAllItems(){
         return mDataBase.query(
