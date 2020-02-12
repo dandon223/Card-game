@@ -45,8 +45,10 @@ public class RankingAdapter extends RecyclerView.Adapter<RankingAdapter.RankingV
         }
         String name = mCursor.getString(mCursor.getColumnIndex(Ranking.RankingEntry.COLUMN_NAME));
         int amount = mCursor.getInt(mCursor.getColumnIndex(Ranking.RankingEntry.COLUMN_POINTS));
+        long id = mCursor.getLong(mCursor.getColumnIndex(Ranking.RankingEntry._ID));
         holder.rankingName.setText(name);
         holder.rankinPoints.setText(String.valueOf(amount));
+        holder.itemView.setTag(id);
     }
 
     @Override

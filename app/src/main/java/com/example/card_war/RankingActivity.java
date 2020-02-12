@@ -1,6 +1,8 @@
 package com.example.card_war;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,6 +28,18 @@ public class RankingActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new RankingAdapter(this , getAllItems());
         recyclerView.setAdapter(mAdapter);
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0 , ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                removeItem((long) viewHolder.itemView.getTag());
+            }
+        }).attachToRecyclerView(recyclerView);
     }
     public void back(View view){
         finish();
@@ -40,5 +54,9 @@ public class RankingActivity extends AppCompatActivity {
                 null,
                 Ranking.RankingEntry.COLUMN_POINTS + " DESC"
         );
+    }
+    private void removeItem(long id){
+        mDataBase.delete(Ranking.RankingEntry.TABLE_NAME , Ranking.RankingEntry._ID +"="+id,null);
+        mAdapter.swapCursor(getAllItems());
     }
 }
