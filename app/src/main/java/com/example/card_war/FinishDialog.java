@@ -31,7 +31,7 @@ public class FinishDialog extends AppCompatDialogFragment {
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        listener.myFinish();
                     }
                 })
                 .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -48,6 +48,7 @@ public class FinishDialog extends AppCompatDialogFragment {
     }
     public interface FinishDialogListener{
         void applyTexts(String username , int points);
+        void myFinish();
     }
 
     @Override
