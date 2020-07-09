@@ -173,7 +173,7 @@ public class GameActivity extends AppCompatActivity implements FinishDialog.Fini
                 enemyDeck.setNumberOfCardsActive(numberOfCards);
                 enemyDeck.shuffle();
             }
-            if(numberOfClicks>2){
+            if(numberOfClicks>14){
                 openDialog();
             }
             countPoints();
