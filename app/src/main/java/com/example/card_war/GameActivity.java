@@ -50,7 +50,7 @@ public class GameActivity extends AppCompatActivity implements FinishDialog.Fini
         ArrayList<Card> myCards = new ArrayList<>();
         ArrayList<Card> enemyCards = new ArrayList<>();
         numberOfClicks = 0;
-        points = 10;
+        points = 0;
         int even = 0;
         for(int i = 0 ; i <deck.size(); i++){
             even++;
@@ -76,7 +76,7 @@ public class GameActivity extends AppCompatActivity implements FinishDialog.Fini
         myDeck.shuffle();
         enemyDeck.shuffle();
         countPoints();
-        updateTextView("26/52 \nPoints: " +getPoints());
+        updateTextView("15 Moves \nPoints: " +getPoints());
         myDeck.print();
     }
 
@@ -173,11 +173,11 @@ public class GameActivity extends AppCompatActivity implements FinishDialog.Fini
                 enemyDeck.setNumberOfCardsActive(numberOfCards);
                 enemyDeck.shuffle();
             }
-            if(numberOfClicks>=2){
+            if(numberOfClicks>2){
                 openDialog();
             }
             countPoints();
-            updateTextView(myDeck.getNumberOfCards()+"/52 \nPoints:"+ getPoints());
+            updateTextView(15-numberOfClicks+" Moves \nPoints:"+ getPoints());
             Log.println(Log.INFO , "1" , myDeck.getNumberOfCardsActive()+" "+myDeck.getNumberOfCards() +" "+ myCardDrawn.compareTo(enemyCardDrawn) );
         }
     }
@@ -196,6 +196,10 @@ public class GameActivity extends AppCompatActivity implements FinishDialog.Fini
         mDataBase.insert(Ranking.RankingEntry.TABLE_NAME,null,cv);
         finish();
 
+    }
+    @Override
+    public void myFinish(){
+        finish();
     }
     public void countPoints(){
         points = myDeck.getPoints();
